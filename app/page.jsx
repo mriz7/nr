@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from ''framer-motion';
-import { Heart, Sparkles, Music, VolumeX, Volume2, ChevronRight, MessageCircleHeart } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Heart, Sparkles, Music, VolumeX, Volume2, ChevronRight, MessageCircle } from 'lucide-react';
 
 export default function ValentineProposal() {
   const [stage, setStage] = useState('welcome');
@@ -21,46 +21,41 @@ export default function ValentineProposal() {
   // ============================================
   // CUSTOMIZE YOUR CONTENT HERE!
   // ============================================
-  const partnerName = "Nithya"; // Change to your partner's name
-  const songFile = "/song.mp3"; // Add your song to /public folder
+  const partnerName = "Nithya"; 
+  const songFile = "/song.mp3"; 
   
   const memories = [
     { 
       id: 1, 
-      image: "/memories/first-meet.jpg", // Add your photos to /public/memories/
-      placeholder: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=400&fit=crop",
+      image: "/memories/first-meet.jpeg", 
       date: "The Day We Met", 
       caption: "I knew from that moment my life would never be the same...", 
       fullStory: "Remember how nervous we both were? I couldn't stop smiling for days after." 
     },
     { 
       id: 2, 
-      image: "/memories/first-date.jpg",
-      placeholder: "https://images.unsplash.com/photo-1511988617509-a57c8a288659?w=600&h=400&fit=crop",
+      image: "/memories/first-date.jpeg",
       date: "Our First Date", 
-      caption: "Moments turned into memories and walking along with you......", 
-      fullStory: "We We talked until the moon shined bright. I never wanted that night to end" 
+      caption: "Moments turned into memories and walking along with you...", 
+      fullStory: "We talked until the moon shined bright. I never wanted that night to end" 
     },
     { 
       id: 3, 
-      image: "/memories/adventure.jpg",
-      placeholder: "https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=600&h=400&fit=crop",
+      image: "/memories/adventure.jpeg",
       date: "Our First Adventure", 
       caption: "Every adventure is better with you by my side", 
       fullStory: "Getting lost in the bliss with each other was the best thing that happened to us that day." 
     },
     { 
       id: 4, 
-      image: "/memories/cozy.jpg",
-      placeholder: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600&h=400&fit=crop",
+      image: "/memories/cozy.jpeg",
       date: "Cozy Moments", 
       caption: "My favorite place is next to you", 
       fullStory: "Rainy days became my favorite because I got to spend them with you." 
     },
     { 
       id: 5, 
-      image: "/memories/celebration.jpg",
-      placeholder: "https://images.unsplash.com/photo-1529543544277-750e7e8a0cf6?w=600&h=400&fit=crop",
+      image: "/memories/celebration.jpeg",
       date: "Celebrating Us", 
       caption: "Every moment with you is worth celebrating", 
       fullStory: "You make ordinary days feel extraordinary. Let's explore the world more together" 
@@ -99,26 +94,24 @@ Your Valentine Riyaz💕`;
     }))
   );
 
-  // Get image source (use placeholder if actual image doesn't exist)
   const getImageSrc = (memory) => {
-    return memory.placeholder; // For demo, use placeholders
-    // In production, you would check if the image exists and return memory.image
+    return memory.image; 
   };
 
-  // Typing effect for love letter
   useEffect(() => {
-    if (stage === 'loveletter' && !isTyping) {
-      setIsTyping(true);
+    if (stage === 'loveletter') {
       let index = 0;
       const timer = setInterval(() => {
         if (index < loveLetterText.length) {
           setTypedText(loveLetterText.slice(0, index + 1));
           index++;
-        } else clearInterval(timer);
-      }, 25);
+        } else {
+          clearInterval(timer);
+        }
+      }, 30);
       return () => clearInterval(timer);
     }
-  }, [stage, isTyping, loveLetterText]);
+  }, [stage, loveLetterText]);
 
   const moveNoButton = () => {
     const maxX = 200;
@@ -138,18 +131,21 @@ Your Valentine Riyaz💕`;
   const handleAnswer = (questionId, answer) => {
     setAnswers(prev => ({ ...prev, [questionId]: answer }));
     setTimeout(() => {
+      // Logic to determine if we go to next memory or love letter
       if (currentMemoryIndex < memories.length - 1) {
         setCurrentMemoryIndex(prev => prev + 1);
         setStage('memory');
       } else {
         setStage('loveletter');
       }
-    }, 600);
+    }, 500);
   };
 
   const nextFromMemory = () => {
     setShowMemoryDetail(false);
+    // Check if there is a question attached to this memory step
     const nextQuestion = questions.find(q => q.afterMemory === currentMemoryIndex + 1);
+    
     if (nextQuestion) {
       setStage('question');
     } else if (currentMemoryIndex < memories.length - 1) {
@@ -184,7 +180,6 @@ Your Valentine Riyaz💕`;
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-pink-100 via-rose-50 to-red-100">
-      {/* Audio Element */}
       <audio ref={audioRef} src={songFile} loop preload="auto" />
 
       {/* Floating Hearts Background */}
@@ -207,10 +202,7 @@ Your Valentine Riyaz💕`;
             }}
             style={{ position: 'absolute', left: `${heart.x}%` }}
           >
-            <Heart
-              className="fill-pink-300 text-pink-300"
-              style={{ width: heart.size, height: heart.size }}
-            />
+            <Heart className="fill-pink-300 text-pink-300" style={{ width: heart.size, height: heart.size }} />
           </motion.div>
         ))}
       </div>
@@ -262,7 +254,6 @@ Your Valentine Riyaz💕`;
         )}
       </AnimatePresence>
 
-      {/* Music Control Button */}
       {!showMusicPrompt && (
         <motion.button
           initial={{ opacity: 0, scale: 0 }}
@@ -270,11 +261,7 @@ Your Valentine Riyaz💕`;
           onClick={toggleMusic}
           className="fixed top-5 right-5 z-40 w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm shadow-lg flex items-center justify-center border border-pink-100"
         >
-          {isPlaying ? (
-            <Volume2 className="w-5 h-5 text-rose-500" />
-          ) : (
-            <VolumeX className="w-5 h-5 text-gray-400" />
-          )}
+          {isPlaying ? <Volume2 className="w-5 h-5 text-rose-500" /> : <VolumeX className="w-5 h-5 text-gray-400" />}
         </motion.button>
       )}
 
@@ -298,7 +285,6 @@ Your Valentine Riyaz💕`;
               >
                 <Heart className="w-20 h-20 mx-auto fill-red-400 text-red-400" />
               </motion.div>
-              
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -308,7 +294,6 @@ Your Valentine Riyaz💕`;
               >
                 Hi {partnerName},
               </motion.h1>
-              
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -318,7 +303,6 @@ Your Valentine Riyaz💕`;
               >
                 I have something special for you...
               </motion.p>
-
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -349,7 +333,6 @@ Your Valentine Riyaz💕`;
               >
                 <Heart className="w-16 h-16 md:w-20 md:h-20 mx-auto fill-red-400 text-red-400" />
               </motion.div>
-
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -359,14 +342,12 @@ Your Valentine Riyaz💕`;
               >
                 Will you be my Valentine?
               </motion.h1>
-
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6 }}
                 className="flex flex-col sm:flex-row items-center justify-center gap-6"
               >
-                {/* YES Button */}
                 <motion.button
                   onClick={handleYesClick}
                   whileHover={{ scale: 1.1 }}
@@ -385,8 +366,6 @@ Your Valentine Riyaz💕`;
                 >
                   YES! 💕
                 </motion.button>
-
-                {/* NO Button */}
                 <motion.button
                   ref={noButtonRef}
                   onMouseEnter={moveNoButton}
@@ -398,7 +377,6 @@ Your Valentine Riyaz💕`;
                   {hasMovedNo ? '👀' : 'No'}
                 </motion.button>
               </motion.div>
-
               {hasMovedNo && (
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
@@ -412,7 +390,7 @@ Your Valentine Riyaz💕`;
             </motion.div>
           )}
 
-          {/* Accepted Celebration */}
+          {/* Accepted Screen */}
           {stage === 'accepted' && (
             <motion.div
               key="accepted"
@@ -422,7 +400,6 @@ Your Valentine Riyaz💕`;
               transition={{ type: 'spring', stiffness: 200, damping: 15 }}
               className="text-center relative z-10"
             >
-              {/* Confetti Hearts */}
               {Array.from({ length: 50 }).map((_, i) => (
                 <motion.div
                   key={i}
@@ -444,7 +421,6 @@ Your Valentine Riyaz💕`;
                   <Heart className="w-6 h-6 md:w-8 md:h-8 fill-red-400 text-red-400" />
                 </motion.div>
               ))}
-
               <div className="mb-8 relative">
                 <Heart className="w-24 h-24 md:w-32 md:h-32 mx-auto fill-red-500 text-red-500" />
                 <motion.div
@@ -455,7 +431,6 @@ Your Valentine Riyaz💕`;
                   <Sparkles className="w-8 h-8 fill-yellow-400 text-yellow-400" />
                 </motion.div>
               </div>
-
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -465,7 +440,6 @@ Your Valentine Riyaz💕`;
               >
                 Yay! 🎉
               </motion.h1>
-
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -488,16 +462,14 @@ Your Valentine Riyaz💕`;
               className="text-center"
             >
               <motion.div className="mb-8">
-                <MessageCircleHeart className="w-16 h-16 mx-auto text-rose-400" />
+                <MessageCircle className="w-16 h-16 mx-auto text-rose-400" />
               </motion.div>
-
               <h2 className="text-5xl md:text-7xl text-rose-600 mb-4" style={{ fontFamily: 'Caveat, cursive' }}>
                 Our Story
               </h2>
               <p className="text-xl text-rose-400 mb-12" style={{ fontFamily: 'Caveat, cursive' }}>
                 A journey through our most precious moments...
               </p>
-
               <div className="flex justify-center gap-4 mb-10">
                 {memories.map((_, idx) => (
                   <motion.div
@@ -509,7 +481,6 @@ Your Valentine Riyaz💕`;
                   />
                 ))}
               </div>
-
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -530,37 +501,31 @@ Your Valentine Riyaz💕`;
               exit={{ opacity: 0, x: -50 }}
               className="w-full max-w-lg"
             >
-              {/* Progress dots */}
               <div className="flex justify-center gap-3 mb-6">
                 {memories.map((_, idx) => (
                   <div
                     key={idx}
                     className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                      idx <= currentMemoryIndex
-                        ? 'bg-gradient-to-r from-red-400 to-pink-500'
-                        : 'bg-white/50'
+                      idx <= currentMemoryIndex ? 'bg-gradient-to-r from-red-400 to-pink-500' : 'bg-white/50'
                     }`}
                   />
                 ))}
               </div>
-
               <div className="bg-white/90 backdrop-blur-md rounded-3xl overflow-hidden shadow-2xl border border-pink-100">
-                <div className="relative h-56 md:h-64 overflow-hidden">
+                <div className="relative h-auto min-h-[300px] overflow-hidden bg-black/5">
                   <img
                     src={getImageSrc(memories[currentMemoryIndex])}
                     alt={memories[currentMemoryIndex].date}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain mx-auto"
                   />
                   <div className="absolute bottom-4 left-4 px-4 py-2 rounded-full bg-white/90 backdrop-blur-sm text-rose-600 font-semibold text-sm shadow-md">
                     {memories[currentMemoryIndex].date}
                   </div>
                 </div>
-
                 <div className="p-6">
                   <p className="text-xl md:text-2xl text-rose-600 mb-4 italic" style={{ fontFamily: 'Caveat, cursive' }}>
                     &quot;{memories[currentMemoryIndex].caption}&quot;
                   </p>
-
                   <AnimatePresence>
                     {showMemoryDetail ? (
                       <motion.div
@@ -581,7 +546,6 @@ Your Valentine Riyaz💕`;
                     )}
                   </AnimatePresence>
                 </div>
-
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -594,7 +558,7 @@ Your Valentine Riyaz💕`;
             </motion.div>
           )}
 
-          {/* Question Screen */}
+          {/* Question Screen - RE-ADDED & FIXED */}
           {stage === 'question' && (() => {
             const q = questions.find(q => q.afterMemory === currentMemoryIndex + 1);
             if (!q) return null;
@@ -611,13 +575,11 @@ Your Valentine Riyaz💕`;
                   transition={{ duration: 2, repeat: Infinity }}
                   className="mb-6"
                 >
-                  <MessageCircleHeart className="w-14 h-14 mx-auto text-rose-400" />
+                  <MessageCircle className="w-14 h-14 mx-auto text-rose-400" />
                 </motion.div>
-
                 <h2 className="text-3xl md:text-4xl text-rose-600 mb-8" style={{ fontFamily: 'Caveat, cursive' }}>
                   {q.question}
                 </h2>
-
                 <div className="flex flex-col gap-3">
                   {q.options.map((option, idx) => (
                     <motion.button
@@ -651,7 +613,6 @@ Your Valentine Riyaz💕`;
                 <div className="text-center mb-6">
                   <Heart className="w-12 h-12 mx-auto fill-red-400 text-red-400" />
                 </div>
-                
                 <pre className="whitespace-pre-wrap text-gray-700 leading-relaxed" style={{ fontFamily: 'Caveat, cursive', fontSize: '1.25rem' }}>
                   {typedText}
                   <motion.span
@@ -661,7 +622,6 @@ Your Valentine Riyaz💕`;
                     |
                   </motion.span>
                 </pre>
-
                 {typedText.length === loveLetterText.length && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -690,7 +650,6 @@ Your Valentine Riyaz💕`;
               animate={{ opacity: 1, y: 0 }}
               className="text-center relative z-10"
             >
-              {/* Floating hearts */}
               {Array.from({ length: 20 }).map((_, i) => (
                 <motion.div
                   key={i}
@@ -700,20 +659,17 @@ Your Valentine Riyaz💕`;
                   style={{ position: 'fixed', left: `${Math.random() * 100}%` }}
                   className="pointer-events-none"
                 >
-                  <Heart
-                    className="fill-pink-400 text-pink-400"
-                    style={{ width: 20 + Math.random() * 30, height: 20 + Math.random() * 30 }}
-                  />
+                  <Heart className="fill-pink-400 text-pink-400" style={{ width: 20 + Math.random() * 30, height: 20 + Math.random() * 30 }} />
                 </motion.div>
               ))}
-
               <h1 className="text-5xl md:text-7xl text-red-500 mb-2" style={{ fontFamily: 'Caveat, cursive' }}>
                 Happy Valentine&apos;s Day!
               </h1>
               <h2 className="text-2xl md:text-4xl text-rose-400 mb-8 italic" style={{ fontFamily: 'Caveat, cursive' }}>
                 To My Forever Love
               </h2>
-
+              
+              {/* Added Answers Section Back */}
               {Object.keys(answers).length > 0 && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -745,7 +701,6 @@ Your Valentine Riyaz💕`;
                   I Love You! 💖
                 </p>
               </motion.div>
-
               <div className="flex justify-center gap-4">
                 {[0, 1, 2].map((i) => (
                   <motion.div
@@ -757,7 +712,6 @@ Your Valentine Riyaz💕`;
                   </motion.div>
                 ))}
               </div>
-
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
